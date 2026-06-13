@@ -59,7 +59,7 @@ type BuiltColumns<T extends ColumnBuilderMap> = {
     [K in keyof T]: T[K] extends ColumnBuilder ? T[K] : never;
 };
 
-interface BuiltModelSchema<T extends ColumnBuilderMap> {
+export interface BuiltModelSchema<T extends ColumnBuilderMap> {
     tableName: string;
     columns: BuiltColumns<T>;
     objects: (db: IDatabase) => QuerySet<Record<string, unknown>>;

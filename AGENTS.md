@@ -21,11 +21,7 @@ deno fmt                  # Format code
 deno test --allow-all     # Run all tests
 deno run --allow-all src/cli.ts              # Run CLI
 deno run --allow-all src/cli.ts dbshell ./test.db  # Run dbshell
-./shift                   # Wrapper script (includes shebang permissions)
 ```
-
-Always run `deno fmt` before committing. The `shift` wrapper script is NOT
-visible to `deno fmt` (shebang quirk) — format `src/cli.ts` directly.
 
 ## Project Structure
 
@@ -34,8 +30,6 @@ visible to `deno fmt` (shebang quirk) — format `src/cli.ts` directly.
 - `src/orm/` — ORM: schema builders, QuerySet, types
 - `src/utils/db/` — Database abstraction (`IDatabase` interface + SQLite impl)
 - `tests/` — Test files, uses `tests/helpers.ts` for shared setup
-- `shift` — Executable CLI wrapper (has shebang,
-  `#!/usr/bin/env -S deno run -A`)
 
 ## Architecture
 

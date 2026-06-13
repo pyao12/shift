@@ -1,5 +1,6 @@
-export { column, defineModel, QuerySet } from "./orm/index.ts";
+export { column, ColumnBuilder, defineModel, QuerySet } from "./orm/index.ts";
 export type {
+    BuiltModelSchema,
     ColumnDefinition,
     ColumnType,
     FilterOperator,

@@ -1,9 +1,12 @@
 {
     "name": "@pyao12/shift",
-    "version": "0.0.2",
-    "exports": "./src/mod.ts",
+    "version": "0.0.3",
+    "exports": {
+        ".": "./src/mod.ts",
+        "./cli": "./src/cli.ts"
+    },
     "bin": {
-        "shift": "./src/cli.ts"
+        "shift-cli": "./src/cli.ts"
     },
     "imports": {
         "@std/assert": "jsr:@std/assert@1"

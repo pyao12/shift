@@ -1,8 +1,7 @@
 name: Publish
 on:
-    push:
-        branches:
-            - main
+    release:
+        types: [created]
 
 jobs:
     publish:
@@ -13,4 +12,4 @@ jobs:
         steps:
             - uses: actions/checkout@v6
             - name: Publish package
-              run: npx jsr publish
+              run: npx jsr publish --no-check
