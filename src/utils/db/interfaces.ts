@@ -8,8 +8,21 @@ interface IDatabase {
     insert: (tableName: string, data: Record<string, unknown>) => void;
     select: (
         tableName: string,
-        options?: { columns?: string[]; where?: string; params?: unknown[] },
+        options?: {
+            columns?: string[];
+            where?: string;
+            params?: unknown[];
+            orderBy?: string;
+            limit?: number;
+            offset?: number;
+        },
     ) => unknown[];
+    update: (
+        tableName: string,
+        data: Record<string, unknown>,
+        where?: string,
+        params?: unknown[],
+    ) => void;
     delete: (tableName: string, where?: string, params?: unknown[]) => void;
 }
 

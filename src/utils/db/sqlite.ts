@@ -33,7 +33,14 @@ class SQLiteConnection implements IDatabase {
 
     select(
         tableName: string,
-        options?: { columns?: string[]; where?: string; params?: unknown[] },
+        options?: {
+            columns?: string[];
+            where?: string;
+            params?: unknown[];
+            orderBy?: string;
+            limit?: number;
+            offset?: number;
+        },
     ) {
         const cols = options?.columns?.join(", ") ?? "*";
         let sql = `SELECT ${cols} FROM ${tableName}`;
@@ -41,8 +48,40 @@ class SQLiteConnection implements IDatabase {
         if (options?.where) {
             sql += ` WHERE ${options.where}`;
         }
+        if (options?.orderBy) {
+            sql += ` ORDER BY ${options.orderBy}`;
+        }
+        if (options?.limit !== undefined) {
+            sql += ` LIMIT ${options.limit}`;
+        } else if (options?.offset !== undefined) {
+            sql += ` LIMIT -1`;
+        }
+        if (options?.offset !== undefined) {
+            sql += ` OFFSET ${options.offset}`;
+        }
         const stmt = this._db.prepare(sql);
         return stmt.all(...params);
+    }
+
+    update(
+        tableName: string,
+        data: Record<string, unknown>,
+        where?: string,
+        params?: unknown[],
+    ) {
+        const keys = Object.keys(data);
+        const setClause = keys.map((k) => `${k} = ?`).join(", ");
+        const values = Object.values(data) as SQLInputValue[];
+        let sql = `UPDATE ${tableName} SET ${setClause}`;
+        if (where) {
+            sql += ` WHERE ${where}`;
+        }
+        const stmt = this._db.prepare(sql);
+        const allParams = [
+            ...values,
+            ...((params as SQLInputValue[]) ?? []),
+        ];
+        stmt.run(...allParams);
     }
 
     delete(tableName: string, where?: string, params?: unknown[]) {
