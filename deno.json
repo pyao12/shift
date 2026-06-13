@@ -1,0 +1,9 @@
+{
+    "name": "@pyao12/Shift",
+    "version": "0.0.1",
+    "exports": "./src/mod.ts",
+    "fmt": {
+        "indentWidth": 4,
+        "singleQuote": false
+    }
+}
