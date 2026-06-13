@@ -1,3 +1,7 @@
+#!/usr/bin/env -S deno run -A
+
+// Add the shebang to give permissions.
+
 // Shift's entrypoint wrapper of CLI.
 // deno fmt cannot see this. (qwq)
 

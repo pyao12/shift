@@ -1,4 +1,4 @@
-import SQLiteConnection from "./sqlite/connect.ts";
+import SQLiteConnection from "./sqlite.ts";
 
 function createDbConnection(url: string, dbType: "sqlite") {
     switch (dbType) {
@@ -7,4 +7,4 @@ function createDbConnection(url: string, dbType: "sqlite") {
     }
 }
 
-export default createDbConnection;
+export { createDbConnection };
