@@ -1,6 +1,9 @@
 import type IDatabase from "../utils/db/interfaces.ts";
 import type { ColumnDefinition } from "./types.ts";
 
+/**
+ * SQL comparison operators supported by {@link QuerySet.filter}.
+ */
 export type FilterOperator =
     | "="
     | "!="
@@ -17,6 +20,13 @@ interface FilterClause {
     value: unknown;
 }
 
+/**
+ * Chainable query builder for reading and writing rows in a model's table.
+ *
+ * All filter/select/limit/offset/orderBy methods return a new {@link QuerySet}
+ * (immutable chaining). Terminal methods (`all`, `first`, `count`, `exists`,
+ * `create`, `update`, `delete`) execute the query against the database.
+ */
 export class QuerySet<T> {
     private _model: {
         tableName: string;
@@ -50,36 +60,42 @@ export class QuerySet<T> {
         return q;
     }
 
+    /** Adds a WHERE clause for the given column, operator, and value. */
     filter(column: string, op: FilterOperator, value: unknown): QuerySet<T> {
         const q = this._clone();
         q._filters.push({ column, op, value });
         return q;
     }
 
+    /** Restricts the result to the specified columns (SELECT projection). */
     select(columns: string[]): QuerySet<T> {
         const q = this._clone();
         q._selectColumns = columns;
         return q;
     }
 
+    /** Limits the result set to at most `n` rows. */
     limit(n: number): QuerySet<T> {
         const q = this._clone();
         q._limitValue = n;
         return q;
     }
 
+    /** Skips the first `n` rows in the result set. */
     offset(n: number): QuerySet<T> {
         const q = this._clone();
         q._offsetValue = n;
         return q;
     }
 
+    /** Orders results by the given column in ascending or descending order. */
     orderBy(column: string, direction: "ASC" | "DESC" = "ASC"): QuerySet<T> {
         const q = this._clone();
         q._orderByClause = `${column} ${direction}`;
         return q;
     }
 
+    /** Executes the query and returns all matching rows. */
     all(): T[] {
         const where = this._buildWhere();
         const params = this._expandParams();
@@ -94,11 +110,13 @@ export class QuerySet<T> {
         }) as T[];
     }
 
+    /** Returns the first matching row, or `null` if none match. */
     first(): T | null {
         const results = this._clone().limit(1).all();
         return results[0] ?? null;
     }
 
+    /** Returns the number of rows matching the current filters. */
     count(): number {
         const where = this._buildWhere();
         const params = this._expandParams();
@@ -112,15 +130,18 @@ export class QuerySet<T> {
         return (rows[0]?._count as number) ?? 0;
     }
 
+    /** Returns `true` if at least one row matches the current filters. */
     exists(): boolean {
         return this.count() > 0;
     }
 
+    /** Inserts a new row with the given data and returns it. */
     create(data: Record<string, unknown>): Record<string, unknown> {
         this._db.insert(this._model.tableName, data);
         return data;
     }
 
+    /** Updates all rows matching the current filters with the given data. */
     update(data: Record<string, unknown>): void {
         const where = this._buildWhere();
         const params = this._expandParams();
@@ -132,6 +153,7 @@ export class QuerySet<T> {
         );
     }
 
+    /** Deletes all rows matching the current filters. */
     delete(): void {
         const where = this._buildWhere();
         const params = this._expandParams();

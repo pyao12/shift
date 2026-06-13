@@ -1,7 +1,13 @@
 import type IDatabase from "../utils/db/interfaces.ts";
 
+/**
+ * Supported SQLite column data types.
+ */
 export type ColumnType = "INTEGER" | "TEXT" | "REAL" | "BLOB";
 
+/**
+ * Describes a single column's SQL type, constraints, and optional default value.
+ */
 export interface ColumnDefinition {
     type: ColumnType;
     primaryKey: boolean;
@@ -11,6 +17,11 @@ export interface ColumnDefinition {
     default?: unknown;
 }
 
+/**
+ * The base interface for a model schema, parameterized by its column map.
+ *
+ * @typeParam T - A record mapping column names to their builder types.
+ */
 export interface ModelSchema<
     T extends Record<string, { _definition: ColumnDefinition }> = Record<
         string,
@@ -33,6 +44,12 @@ type InferColumnType<C extends { _definition: ColumnDefinition }> =
         ? SqlTypeToTs<C["_definition"]["type"]> | null
         : SqlTypeToTs<C["_definition"]["type"]>;
 
+/**
+ * Infers the TypeScript row type from a model schema.
+ *
+ * Maps each column to its corresponding TS type based on the SQL type,
+ * and applies `| null` for nullable columns.
+ */
 export type InferRow<M extends ModelSchema> = {
     [K in keyof M["columns"]]: InferColumnType<M["columns"][K]>;
 };

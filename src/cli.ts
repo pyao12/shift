@@ -1,3 +1,9 @@
+/**
+ * Shift CLI entry point.
+ *
+ * Provides command-line subcommands for interacting with Shift databases,
+ * including an interactive SQLite shell (`dbshell`).
+ */
 import data from "../deno.json" with { type: "json" };
 
 import dbShell from "./scripts/dbShell.ts";
@@ -32,6 +38,9 @@ function cliMain() {
     }
 }
 
+/**
+ * Main CLI dispatcher. Parses `Deno.args` and routes to the appropriate subcommand.
+ */
 export default cliMain;
 
 if (import.meta.main) {
