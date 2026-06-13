@@ -17,6 +17,12 @@ interface IDatabase {
             offset?: number;
         },
     ) => unknown[];
+    update: (
+        tableName: string,
+        data: Record<string, unknown>,
+        where?: string,
+        params?: unknown[],
+    ) => void;
     delete: (tableName: string, where?: string, params?: unknown[]) => void;
 }
 

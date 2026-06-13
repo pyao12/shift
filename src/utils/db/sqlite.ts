@@ -63,6 +63,27 @@ class SQLiteConnection implements IDatabase {
         return stmt.all(...params);
     }
 
+    update(
+        tableName: string,
+        data: Record<string, unknown>,
+        where?: string,
+        params?: unknown[],
+    ) {
+        const keys = Object.keys(data);
+        const setClause = keys.map((k) => `${k} = ?`).join(", ");
+        const values = Object.values(data) as SQLInputValue[];
+        let sql = `UPDATE ${tableName} SET ${setClause}`;
+        if (where) {
+            sql += ` WHERE ${where}`;
+        }
+        const stmt = this._db.prepare(sql);
+        const allParams = [
+            ...values,
+            ...((params as SQLInputValue[]) ?? []),
+        ];
+        stmt.run(...allParams);
+    }
+
     delete(tableName: string, where?: string, params?: unknown[]) {
         let sql = `DELETE FROM ${tableName}`;
         if (where) {

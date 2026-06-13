@@ -116,6 +116,32 @@ export class QuerySet<T> {
         return this.count() > 0;
     }
 
+    create(data: Record<string, unknown>): Record<string, unknown> {
+        this._db.insert(this._model.tableName, data);
+        return data;
+    }
+
+    update(data: Record<string, unknown>): void {
+        const where = this._buildWhere();
+        const params = this._expandParams();
+        this._db.update(
+            this._model.tableName,
+            data,
+            where ?? undefined,
+            params.length > 0 ? params : undefined,
+        );
+    }
+
+    delete(): void {
+        const where = this._buildWhere();
+        const params = this._expandParams();
+        this._db.delete(
+            this._model.tableName,
+            where ?? undefined,
+            params.length > 0 ? params : undefined,
+        );
+    }
+
     private _buildWhere(): string | null {
         if (this._filters.length === 0) return null;
 

@@ -5,10 +5,12 @@ import { column, defineModel } from "../src/mod.ts";
 const TEST_DB = "./tests/test_all.db";
 
 export function cleanDb() {
-    try {
-        Deno.removeSync(TEST_DB);
-    } catch {
-        // ignore
+    for (const suffix of ["", "-wal", "-shm", "-journal"]) {
+        try {
+            Deno.removeSync(TEST_DB + suffix);
+        } catch {
+            // ignore
+        }
     }
 }
 

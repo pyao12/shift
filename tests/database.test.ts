@@ -158,6 +158,37 @@ Deno.test("db.delete all rows without where", () => {
     assertEquals(rows.length, 0);
 });
 
+Deno.test("db.update modifies rows", () => {
+    const db = getDb();
+    db.create("users", [
+        { name: "id", type: "INTEGER PRIMARY KEY" },
+        { name: "name", type: "TEXT" },
+        { name: "age", type: "INTEGER" },
+    ]);
+    db.insert("users", { id: 1, name: "Alice", age: 30 });
+    db.insert("users", { id: 2, name: "Bob", age: 20 });
+    db.update("users", { age: 99 }, "name = ?", ["Alice"]);
+    const rows = db.select("users", {
+        where: "name = ?",
+        params: ["Alice"],
+    }) as { age: number }[];
+    assertEquals(rows[0].age, 99);
+});
+
+Deno.test("db.update all rows without where", () => {
+    const db = getDb();
+    db.create("users", [
+        { name: "id", type: "INTEGER PRIMARY KEY" },
+        { name: "name", type: "TEXT" },
+        { name: "age", type: "INTEGER" },
+    ]);
+    db.insert("users", { id: 1, name: "Alice", age: 30 });
+    db.insert("users", { id: 2, name: "Bob", age: 20 });
+    db.update("users", { age: 0 });
+    const rows = db.select("users") as { age: number }[];
+    assertEquals(rows.every((r) => r.age === 0), true);
+});
+
 Deno.test("db.execute runs raw SQL", () => {
     const db = getDb();
     db.create("nums", [{ name: "v", type: "INTEGER" }]);
