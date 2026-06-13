@@ -1,5 +1,5 @@
-# 欢迎来到Shift！
+# Welcome to Shift!
 
-Shift是一个基于deno生态的数据库结构管理工具。具有ORM、数据库迁移等功能，类似于Python生态的Django.
+Shift is a database structure management tool based on the Deno ecosystem. It features ORM, database migrations, and other capabilities, similar to Django in the Python ecosystem.
 
-本项目在[MIT](LICENSE)协议下发布，任何人都可以创作衍生作品。
+This project is released under the [MIT](LICENSE) license, and anyone can create derivative works.
