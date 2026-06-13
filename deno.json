@@ -1,5 +1,5 @@
 {
-    "name": "@pyao12/Shift",
+    "name": "@pyao12/shift",
     "version": "0.0.1",
     "exports": "./src/mod.ts",
     "imports": {
