@@ -33,3 +33,7 @@ function cliMain() {
 }
 
 export default cliMain;
+
+if (import.meta.main) {
+    cliMain();
+}
