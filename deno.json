@@ -1,6 +1,6 @@
 {
     "name": "@pyao12/shift",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Shift is a database structure management tool based on the Deno ecosystem.",
     "publish": {
         "include": [
